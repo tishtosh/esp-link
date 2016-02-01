@@ -15,6 +15,9 @@ It implements a number of features:
 The firmware includes a tiny HTTP server based on
 http://www.esp8266.com/viewforum.php?f=34[esphttpd]
 with a simple web interface, many thanks to Jeroen Domburg for making it available!
+The REST and MQTT functionality are loosely based on https://github.com/tuanpmt/espduino
+but significantly reqritten and no longer protocol compatible, thanks to tuanpmt for the
+inspiration!
 
 Many thanks to https://github.com/brunnels for contributions in particular around the espduino
 functionality. Thank you also to https://github.com/susisstrolch and https://github.com/bc547 for
@@ -80,10 +83,10 @@ Eye Candy
 These screen shots show the Home page, the Wifi configuration page, the console for the
 attached microcontroller, and the pin assignments card:
 
-image:https://cloud.githubusercontent.com/assets/39480/8261425/6ca395a6-167f-11e5-8e92-77150371135a.png
-image:https://cloud.githubusercontent.com/assets/39480/8261427/6caf7326-167f-11e5-8085-bc8b20159b2b.png
-image:https://cloud.githubusercontent.com/assets/39480/8261426/6ca7f75e-167f-11e5-827d-9a1c582ad05d.png
-image:https://cloud.githubusercontent.com/assets/39480/8261658/11e6c64a-1681-11e5-82d0-ea5ec90a6ddb.png
+image:https://cloud.githubusercontent.com/assets/39480/8261425/6ca395a6-167f-11e5-8e92-77150371135a.png[width="45%"]
+image:https://cloud.githubusercontent.com/assets/39480/8261427/6caf7326-167f-11e5-8085-bc8b20159b2b.png[width="45%"]
+image:https://cloud.githubusercontent.com/assets/39480/8261426/6ca7f75e-167f-11e5-827d-9a1c582ad05d.png[width="45%"]
+image:https://cloud.githubusercontent.com/assets/39480/8261658/11e6c64a-1681-11e5-82d0-ea5ec90a6ddb.png[width="45%"]
 
 Hardware info
 -------------
@@ -146,7 +149,7 @@ to join its network to configure it. The short version is:
  1. esp-link creates a wifi access point with an SSID of the form `ESP_012ABC` (some modules
     use a different SSID form, such as `ai-thinker-012ABC`)
  2. you join your laptop or phone to esp-link's network as a station and you configure
-    esp-link wifi with your network info by pointing your browser at http://192.168.4.1/
+    esp-link wifi with your network info by pointing your browser at `http://192.168.4.1/`
  3. you set a hostname for esp-link on the "home" page, or leave the default ("esp-link")
  4. esp-link starts to connect to your network while continuing to also be an access point
     ("AP+STA"), the esp-link may show up with a `${hostname}.local` hostname
@@ -462,7 +465,7 @@ baud rate to 115200 is recommended.)
 
 Another option is to use a serial-to-tcp port forwarding driver and point that to port 2323
 of esp-link. On windows users have reported success with
-[HW Virtual Serial Port](http://www.hw-group.com/products/hw_vsp/hw_vsp2_en.html)
+http://www.hw-group.com/products/hw_vsp/hw_vsp2_en.html[HW Virtual Serial Port]
 
 Now to the interference problem: once the attached esp8266 is reset it
 starts outputting its 26Mhz clock on gpio0, which needs to be attached to
@@ -481,6 +484,7 @@ the cable connecting the two esp8266's through a ferrite bead.
 
 Debug log
 ---------
+
 The esp-link web UI can display the esp-link debug log (os_printf statements in the code). This
 is handy but sometimes not sufficient. Esp-link also prints the debug info to the UART where
 it is sometimes more convenient and sometimes less... For this reason three UART debug log
@@ -498,7 +502,7 @@ esp8266 comes out of reset. This cannot be disabled.
 Outbound HTTP REST requests and MQTT client
 -------------------------------------------
 
-The V2 versions of esp-link support the espduino SLIP protocol that supports simple outbound
+The V2 versions of esp-link use the SLIP protocol over the serial link to support simple outbound
 HTTP REST requests as well as an MQTT client. The SLIP protocol consists of commands with
 binary arguments sent from the
 attached microcontroller to the esp8266, which then performs the command and responds back.
@@ -507,11 +511,8 @@ command sent by the uC contains a callback address and the response from the esp
 with that callback address. This enables asynchronous communication where esp-link can notify the
 uC when requests complete or when other actions happen, such as wifi connectivity status changes.
 
-You can find a demo sketch in a fork of the espduino library at
-https://github.com/tve/espduino in the
-https://github.com/tve/espduino/tree/master/espduino/examples/demo[examples/demo folder].
-
-More docs forthcoming...
+You can find REST and MQTT libraries as well as demo sketches in the
+https://github.com/jeelabs/el-client[el-client] repository.
 
 Contact
 -------
