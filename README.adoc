@@ -1,5 +1,9 @@
 ESP-LINK: Wifi-Serial Bridge w/REST&MQTT
 ========================================
+Thorsten von Eicken
+:toc:
+"toc-title:Table of Contents
+:toc-placement!:
 
 This firmware connects an attached micro-controller to the internet using a ESP8266 Wifi module.
 It implements a number of features:
@@ -23,6 +27,12 @@ Many thanks to https://github.com/brunnels for contributions in particular aroun
 functionality. Thank you also to https://github.com/susisstrolch and https://github.com/bc547 for
 additional contributions!
 
+
+Table of Contents
+-----------------
+
+toc::[]
+
 Releases & Downloads
 --------------------
 
@@ -35,8 +45,10 @@ Releases & Downloads
 For quick support and questions chat at
 image:https://badges.gitter.im/Join%20Chat.svg[link="https://gitter.im/jeelabs/esp-link"]
 
-Esp-link goals
---------------
+Intro
+-----
+
+### Esp-link goals
 
 The goal of the esp-link project is to create an advanced Wifi co-processor. Esp-link assumes that
 there is a "main processor" (also referred to as "attached uController") and that esp-link's role
@@ -56,8 +68,8 @@ actuators directly to it. A few users have taken esp-link as a starting point fo
 things and that's great, but there's also value in keeping the mainline esp-link project
 focused on a clear mission.
 
-Esp-link uses
--------------
+###Esp-link uses
+
 The simplest use of esp-link is as a transparent serial to wifi bridge. You can flash an attached
 uC over wifi and you can watch the uC's serial debug output by connecting to port 23 or looking
 at the uC Console web page.
@@ -78,8 +90,8 @@ the attached uC registers callbacks at start-up such that the code in the esp do
 know which exact sensors/actuators the attached uC has, it learns that through the initial
 callback registration.
 
-Eye Candy
----------
+### Eye Candy
+
 These screen shots show the Home page, the Wifi configuration page, the console for the
 attached microcontroller, and the pin assignments card:
 
@@ -88,8 +100,11 @@ image:https://cloud.githubusercontent.com/assets/39480/8261427/6caf7326-167f-11e
 image:https://cloud.githubusercontent.com/assets/39480/8261426/6ca7f75e-167f-11e5-827d-9a1c582ad05d.png[width="45%"]
 image:https://cloud.githubusercontent.com/assets/39480/8261658/11e6c64a-1681-11e5-82d0-ea5ec90a6ddb.png[width="45%"]
 
-Hardware info
--------------
+Getting Started
+---------------
+
+### Hardware configuration
+
 This firmware is designed for any esp8266 module.
 The recommended connections for an esp-01 module are:
 
@@ -125,8 +140,7 @@ seen both used, sigh).
 
 The GPIO pin assignments can be changed dynamically in the web UI and are saved in flash.
 
-Initial flashing
-----------------
+### Initial flashing
 
 If you want to simply flash a pre-built firmware binary, you can download the latest
 https://github.com/jeelabs/esp-link/releases[release] and use your favorite
@@ -138,8 +152,7 @@ stored in the boot sector (address 0). This is the standard way that the esp8266
 the flash size. What this means is that you need to set this properly when you flash the bootloader.
 If you use esptool.py you can do it using the -ff and -fs options.
 
-Wifi configuration overview
----------------------------
+### Wifi configuration overview
 
 For proper operation the end state that esp-link needs to arrive at is to have it
 join your pre-existing wifi network as a pure station.
@@ -158,8 +171,7 @@ to join its network to configure it. The short version is:
     you reconnect your laptop/phone to your normal network and access esp-link via its hostname
     or IP address
 
-LED indicators
---------------
+### LED indicators
 
 Assuming appropriate hardware attached to GPIO pins, the green "conn" LED will show the wifi
 status as follows:
@@ -173,8 +185,30 @@ status as follows:
 
 The yellow "ser" LED will blink briefly every time serial data is sent or received by the esp-link.
 
-Wifi configuration details
---------------------------
+### Troubleshooting
+
+- verify that you have sufficient power, borderline power can cause the esp module to seemingly
+  function until it tries to transmit and the power rail collapses
+- if you just cannot flash your esp8266 module (some people call it the zombie mode) make sure you
+  have gpio0 and gpio15 pulled to gnd with a 1K resistor, gpio2 tied to 3.3V with 1K resistor, and
+  RX/TX connected without anything in series. If you need to level shift the signal going into the
+  esp8266's RX use a 1K resistor. Use 115200 baud in the flasher.
+  (For a permanent set-up I would use higher resistor values but
+  when nothing seems to work these are the ones I try.)
+- if the flashing succeeded, check the "conn" LED to see which mode esp-link is in (see LED info above)
+- reset or power-cycle the esp-link to force it to become an access-point if it can't
+  connect to your network within 15-20 seconds
+- if the LED says that esp-link is on your network but you can't get to it, make sure your
+  laptop is on the same network (and no longer on the esp's network)
+- if you do not know the esp-link's IP address on your network, try `esp-link.local`, try to find
+  the lease in your DHCP server; if all fails, you may have to turn off your access point (or walk
+  far enough away) and reset/power-cycle esp-link, it will then fail to connect and start its
+  own AP after 15-20 seconds
+
+Configuration details
+---------------------
+
+### Wifi
 
 After you have serially flashed the module it will create a wifi access point (AP) with an
 SSID of the form `ESP_012ABC` where 012ABC is a piece of the module's MAC address.
@@ -209,8 +243,7 @@ used to configure the ssid/password info. The problem is that the initial STA+AP
 channel 1 and you configure it to connect to an AP on channel 6. This requires the ESP8266's AP
 to also switch to channel 6 disconnecting you in the meantime. 
 
-Hostname, description, DHCP, mDNS
----------------------------------
+### Hostname, description, DHCP, mDNS
 
 You can set a hostname on the "home" page, this should be just the hostname and not a domain
 name, i.e., something like "test-module-1" and not "test-module-1.mydomain.com".
@@ -230,29 +263,10 @@ You can also enter a description of up to 128 characters on the home page (botto
 allows you to leave a memo for yourself, such as "installed in basement to control the heating
 system". This descritpion is not used anywhere else.
 
-Troubleshooting
----------------
-
-- verify that you have sufficient power, borderline power can cause the esp module to seemingly
-  function until it tries to transmit and the power rail collapses
-- if you just cannot flash your esp8266 module (some people call it the zombie mode) make sure you
-  have gpio0 and gpio15 pulled to gnd with a 1K resistor, gpio2 tied to 3.3V with 1K resistor, and
-  RX/TX connected without anything in series. If you need to level shift the signal going into the
-  esp8266's RX use a 1K resistor. Use 115200 baud in the flasher.
-  (For a permanent set-up I would use higher resistor values but
-  when nothing seems to work these are the ones I try.)
-- if the flashing succeeded, check the "conn" LED to see which mode esp-link is in (see LED info above)
-- reset or power-cycle the esp-link to force it to become an access-point if it can't
-  connect to your network within 15-20 seconds
-- if the LED says that esp-link is on your network but you can't get to it, make sure your
-  laptop is on the same network (and no longer on the esp's network)
-- if you do not know the esp-link's IP address on your network, try `esp-link.local`, try to find
-  the lease in your DHCP server; if all fails, you may have to turn off your access point (or walk
-  far enough away) and reset/power-cycle esp-link, it will then fail to connect and start its
-  own AP after 15-20 seconds
-
 Building the firmware
 ---------------------
+
+### Linux
 
 The firmware has been built using the https://github.com/pfalcon/esp-open-sdk[esp-open-sdk]
 on a Linux system. Create an esp8266 directory, install the esp-open-sdk into a sub-directory
@@ -286,6 +300,8 @@ A few notes from others (I can't fully verify these):
 - Make sure the paths at the beginning of the makefile are correct
 - Make sure `esp-open-sdk/xtensa-lx106-elf/bin` is in the PATH set in the Makefile
 
+### Windows
+
 It is possible to build esp-link on Windows, but it requires a gaggle of software to be installed:
 
 - Install the unofficial sdk, mingw, SourceTree (gui git client), python 2.7, git cli, Java
@@ -295,8 +311,7 @@ It is possible to build esp-link on Windows, but it requires a gaggle of softwar
   the java bin directory under program files.
 - ...
 
-Updating the firmware over-the-air
-----------------------------------
+### Updating the firmware over-the-air
 
 This firmware supports over-the-air (OTA) flashing, so you do not have to deal with serial
 flashing again after the initial one! The recommended way to flash is to use `make wiflash`
@@ -407,7 +422,7 @@ The efficiency is not 100% because there is protocol overhead (such as sync, rec
 length characters)
 and there is dead time waiting for an ack or preparing the next record to be sent.
 
-#### Details of built-in AVR flash algorithm
+### Details of built-in AVR flash algorithm
 
 The built-in flashing algorithm differs a bit from what avrdude does. The programming protocol
 states that STK_GET_SYNC+CRC_EOP (0x30 0x20) should be sent to synchronize, but that works poorly
@@ -482,8 +497,7 @@ add a series 100ohm resistor and 100pf capacitor to ground as close to
 the gpio0 pin as possible (basically a low pass filter); and/or pass
 the cable connecting the two esp8266's through a ferrite bead.
 
-Debug log
----------
+### Debug log
 
 The esp-link web UI can display the esp-link debug log (os_printf statements in the code). This
 is handy but sometimes not sufficient. Esp-link also prints the debug info to the UART where
