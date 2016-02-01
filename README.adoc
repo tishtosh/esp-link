@@ -68,7 +68,7 @@ actuators directly to it. A few users have taken esp-link as a starting point fo
 things and that's great, but there's also value in keeping the mainline esp-link project
 focused on a clear mission.
 
-###Esp-link uses
+### Esp-link uses
 
 The simplest use of esp-link is as a transparent serial to wifi bridge. You can flash an attached
 uC over wifi and you can watch the uC's serial debug output by connecting to port 23 or looking
