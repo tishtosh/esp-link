@@ -20,14 +20,17 @@ Many thanks to https://github.com/brunnels for contributions in particular aroun
 functionality. Thank you also to https://github.com/susisstrolch and https://github.com/bc547 for
 additional contributions!
 
-### https://github.com/jeelabs/esp-link/releases[Releases & Downloads]
+Releases & Downloads
+--------------------
 
 - https://github.com/jeelabs/esp-link/releases/tag/v2.1.7[V2.1.7] is the most recent release.
   It has the new built-in stk500v1 programmer and works on all modules (esp-01 through esp-12).
 - https://github.com/jeelabs/esp-link/releases/tag/v2.2.beta2[V2.2.beta2] will be coming
   up shortly with mDNS, sNTP, and syslog support, stay tuned...
+- See https://github.com/jeelabs/esp-link/releases[all releases].
 
-For quick support and questions chat at https://gitter.im/jeelabs/esp-link[image:https://badges.gitter.im/Join%20Chat.svg] (https://gitter.im/jeelabs/esp-link?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+For quick support and questions chat at
+image:https://badges.gitter.im/Join%20Chat.svg[link="https://gitter.im/jeelabs/esp-link"]
 
 Esp-link goals
 --------------
@@ -77,10 +80,10 @@ Eye Candy
 These screen shots show the Home page, the Wifi configuration page, the console for the
 attached microcontroller, and the pin assignments card:
 
-<img width="45%" src="https://cloud.githubusercontent.com/assets/39480/8261425/6ca395a6-167f-11e5-8e92-77150371135a.png">
-<img width="45%" src="https://cloud.githubusercontent.com/assets/39480/8261427/6caf7326-167f-11e5-8085-bc8b20159b2b.png">
-<img width="45%" src="https://cloud.githubusercontent.com/assets/39480/8261426/6ca7f75e-167f-11e5-827d-9a1c582ad05d.png">
-<img width="30%" src="https://cloud.githubusercontent.com/assets/39480/8261658/11e6c64a-1681-11e5-82d0-ea5ec90a6ddb.png">
+image:https://cloud.githubusercontent.com/assets/39480/8261425/6ca395a6-167f-11e5-8e92-77150371135a.png
+image:https://cloud.githubusercontent.com/assets/39480/8261427/6caf7326-167f-11e5-8085-bc8b20159b2b.png
+image:https://cloud.githubusercontent.com/assets/39480/8261426/6ca7f75e-167f-11e5-827d-9a1c582ad05d.png
+image:https://cloud.githubusercontent.com/assets/39480/8261658/11e6c64a-1681-11e5-82d0-ea5ec90a6ddb.png
 
 Hardware info
 -------------
