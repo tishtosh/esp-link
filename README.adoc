@@ -1,33 +1,33 @@
-ESP-LINK
-========
+ESP-LINK: Wifi-Serial Bridge w/REST&MQTT
+========================================
 
 This firmware connects an attached micro-controller to the internet using a ESP8266 Wifi module.
 It implements a number of features:
+
+[options="compact"]
 - transparent bridge between Wifi and serial, useful for debugging or inputting into a uC
 - flash-programming attached Arduino/AVR microcontrollers, esp8266 modules, as well as
   LPC800-series and other ARM microcontrollers via Wifi
-- built-in stk500v1 programmer for AVR uC's with optiboot: program using HTTP upload of hex file
-- outbound TCP (and thus HTTP) connections from the attached micro-controller to the internet
-- outbound REST HTTP requests from the attached micro-controller to the internet, protocol
-  based on espduino and compatible with [tuanpmt/espduino](https://github.com/tuanpmt/espduino)
+- built-in stk500v1 programmer for AVR uC's: program using HTTP upload of hex file
+- outbound REST HTTP requests from the attached micro-controller to the internet
+- MQTT client pub/sub from the attached micro-controller to the internet
 
 The firmware includes a tiny HTTP server based on
-[esphttpd](http://www.esp8266.com/viewforum.php?f=34)
+http://www.esp8266.com/viewforum.php?f=34[esphttpd]
 with a simple web interface, many thanks to Jeroen Domburg for making it available!
 
 Many thanks to https://github.com/brunnels for contributions in particular around the espduino
 functionality. Thank you also to https://github.com/susisstrolch and https://github.com/bc547 for
 additional contributions!
 
-###[Releases & Downloads](https://github.com/jeelabs/esp-link/releases)
+### https://github.com/jeelabs/esp-link/releases[Releases & Downloads]
 
-- [V2.1.7](https://github.com/jeelabs/esp-link/releases/tag/v2.1.7) is the most recent release.
+- https://github.com/jeelabs/esp-link/releases/tag/v2.1.7[V2.1.7] is the most recent release.
   It has the new built-in stk500v1 programmer and works on all modules (esp-01 through esp-12).
-- [V2.2.beta1](https://github.com/jeelabs/esp-link/releases/tag/v2.2.beta1) will be coming
+- https://github.com/jeelabs/esp-link/releases/tag/v2.2.beta2[V2.2.beta2] will be coming
   up shortly with mDNS, sNTP, and syslog support, stay tuned...
 
-For quick support and questions:
-[![Chat at https://gitter.im/jeelabs/esp-link](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/jeelabs/esp-link?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+For quick support and questions chat at https://gitter.im/jeelabs/esp-link[image:https://badges.gitter.im/Join%20Chat.svg] (https://gitter.im/jeelabs/esp-link?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 Esp-link goals
 --------------
@@ -38,6 +38,7 @@ is to facilitate communication over Wifi. Where esp-link is a bit unusual is tha
 just a Wifi interface or a slave co-processor. In some sense it's the master, because the main
 processor can be reset, controlled and reprogrammed through esp-link. The three main areas of
 functionality in esp-link are:
+
 - reprogramming and debugging the attached uC
 - letting the attached uC make outbound communication and offloading the protocol processing
 - forwarding inbound communication and offloading the protocol processing (this part is the
@@ -85,12 +86,14 @@ Hardware info
 -------------
 This firmware is designed for any esp8266 module.
 The recommended connections for an esp-01 module are:
+
 - URXD: connect to TX of microcontroller
 - UTXD: connect to RX of microcontroller
 - GPIO0: connect to RESET of microcontroller
 - GPIO2: optionally connect green LED to 3.3V (indicates wifi status)
 
 The recommended connections for an esp-12 module are:
+
 - URXD: connect to TX of microcontroller
 - UTXD: connect to RX of microcontroller
 - GPIO12: connect to RESET of microcontroller
@@ -102,6 +105,7 @@ The recommended connections for an esp-12 module are:
 If your application has problems with the boot message that is output at ~74600 baud by the ROM
 at boot time you can connect an esp-12 module as follows and choose the "swap_uart" pin assignment
 in the esp-link web interface:
+
 - GPIO13: connect to TX of microcontroller
 - GPIO15: connect to RX of microcontroller
 - GPIO1/UTXD: connect to RESET of microcontroller
@@ -117,8 +121,9 @@ The GPIO pin assignments can be changed dynamically in the web UI and are saved 
 
 Initial flashing
 ----------------
+
 If you want to simply flash a pre-built firmware binary, you can download the latest
-[release](https://github.com/jeelabs/esp-link/releases) and use your favorite
+https://github.com/jeelabs/esp-link/releases[release] and use your favorite
 ESP8266 flashing tool to flash the bootloader, the firmware, and blank settings.
 Detailed instructions are provided in the release notes.
 
@@ -128,11 +133,13 @@ the flash size. What this means is that you need to set this properly when you f
 If you use esptool.py you can do it using the -ff and -fs options.
 
 Wifi configuration overview
-------------------
+---------------------------
+
 For proper operation the end state that esp-link needs to arrive at is to have it
 join your pre-existing wifi network as a pure station.
 However, in order to get there esp-link will start out as an access point and you'll have
 to join its network to configure it. The short version is:
+
  1. esp-link creates a wifi access point with an SSID of the form `ESP_012ABC` (some modules
     use a different SSID form, such as `ai-thinker-012ABC`)
  2. you join your laptop or phone to esp-link's network as a station and you configure
@@ -147,8 +154,10 @@ to join its network to configure it. The short version is:
 
 LED indicators
 --------------
+
 Assuming appropriate hardware attached to GPIO pins, the green "conn" LED will show the wifi
 status as follows:
+
 - Very short flash once a second: not connected to a network and running as AP+STA, i.e.
   trying to connect to the configured network
 - Very short flash once every two seconds: not connected to a network and running as AP-only
@@ -160,6 +169,7 @@ The yellow "ser" LED will blink briefly every time serial data is sent or receiv
 
 Wifi configuration details
 --------------------------
+
 After you have serially flashed the module it will create a wifi access point (AP) with an
 SSID of the form `ESP_012ABC` where 012ABC is a piece of the module's MAC address.
 Using a laptop, phone, or tablet connect to this SSID and then open a browser pointed at
@@ -195,9 +205,11 @@ to also switch to channel 6 disconnecting you in the meantime.
 
 Hostname, description, DHCP, mDNS
 ---------------------------------
+
 You can set a hostname on the "home" page, this should be just the hostname and not a domain
 name, i.e., something like "test-module-1" and not "test-module-1.mydomain.com".
 This has a number of effects:
+
 - you will see the first 12 chars of the hostname in the menu bar (top left of the page) so
   if you have multiple modules you can distinguish them visually
 - esp-link will use the hostname in its DHCP request, which allows you to identify the module's
@@ -214,6 +226,7 @@ system". This descritpion is not used anywhere else.
 
 Troubleshooting
 ---------------
+
 - verify that you have sufficient power, borderline power can cause the esp module to seemingly
   function until it tries to transmit and the power rail collapses
 - if you just cannot flash your esp8266 module (some people call it the zombie mode) make sure you
@@ -234,14 +247,15 @@ Troubleshooting
 
 Building the firmware
 ---------------------
-The firmware has been built using the [esp-open-sdk](https://github.com/pfalcon/esp-open-sdk)
+
+The firmware has been built using the https://github.com/pfalcon/esp-open-sdk[esp-open-sdk]
 on a Linux system. Create an esp8266 directory, install the esp-open-sdk into a sub-directory
 using the *non-standalone* install (i.e., there should not be an sdk directory in the esp-open-sdk
 dir when done installing, if you use the standalone install you will get compilation errors
 with std types, such as `uint32_t`).
 
 Download the Espressif SDK (use the version mentioned in the release notes) from their
-[download forum](http://bbs.espressif.com/viewforum.php?f=5) and also expand it into a
+http://bbs.espressif.com/viewforum.php?f=5[download forum] and also expand it into a
 sub-directory.
 
 Clone the esp-link repository into a third sub-directory and check out the tag you would like,
@@ -260,12 +274,14 @@ Now, build the code: `make` in the top-level of esp-link. If you want to se the 
 issued, use `VERBOSE=1 make`.
 
 A few notes from others (I can't fully verify these):
+
 - You may need to install `zlib1g-dev` and `python-serial`
 - Make sure you have the correct version of the esp_iot_sdk
 - Make sure the paths at the beginning of the makefile are correct
 - Make sure `esp-open-sdk/xtensa-lx106-elf/bin` is in the PATH set in the Makefile
 
 It is possible to build esp-link on Windows, but it requires a gaggle of software to be installed:
+
 - Install the unofficial sdk, mingw, SourceTree (gui git client), python 2.7, git cli, Java
 - Use SourceTree to checkout under C:\espressif or wherever you installed the unofficial sdk,
   (see this thread for the unofficial sdk http://www.esp8266.com/viewtopic.php?t=820)
@@ -274,7 +290,8 @@ It is possible to build esp-link on Windows, but it requires a gaggle of softwar
 - ...
 
 Updating the firmware over-the-air
----------------------
+----------------------------------
+
 This firmware supports over-the-air (OTA) flashing, so you do not have to deal with serial
 flashing again after the initial one! The recommended way to flash is to use `make wiflash`
 if you are also building the firmware.
@@ -303,6 +320,7 @@ The flash configuration and the OTA upgrade process is described in more detail 
 
 Serial bridge and connections to Arduino, AVR, ARM, LPC microcontrollers
 ------------------------------------------------------------------------
+
 In order to connect through the esp-link to a microcontroller use port 23. For example,
 on linux you can use `nc esp-hostname 23` or `telnet esp-hostname 23`.
 
@@ -313,6 +331,7 @@ broadcast incoming characters from the serial RX to all connections. Use with ca
 ### Flashing an attached AVR/Arduino
 
 There are three options for reprogramming an attached AVR/Arduino microcontroller:
+
 - Use avrdude and point it at port 23 of esp-link. Esp-link automatically detects the programming
   sequence and issues a reset to the AVR.
 - Use avrdude and point it at port 2323 of esp-link. This is the same as port 23 except that the
@@ -350,11 +369,13 @@ If your AVR doesn't use optiboot then use port 2323 since esp-link may not recog
 sequence and not issue a reset if you use port 23.
 
 If you are having trouble with the built-in programmer and see something like this:
-```
+
+--------------------
 # ./avrflash 192.168.3.104 blink.hex
 Error checking sync: FAILED to SYNC: abandoned after timeout, got:
 :\xF/\x00\xCj\xCz\xCJ\xCZ\xC\xAÜ\xC\xAä\xC\xAÜ\xC\xAä\xC\xBì\xC\xBô\xC\xBì\xC\xBô\xC\xAÜ\xC\xAä\xC
-```
+--------------------
+
 the most likely cause is a baud rate mismatch and/or a bad connection from the esp8266 to the
 AVRs reset line.
 The baud rate used by esp-link is set on the uC Console web page and, as mentioned above, it will
@@ -366,9 +387,11 @@ correct baud rate configured but reset isn't functioning, or reset may be functi
 baud rate may be incorrect.
 
 The output of a successful flash using the built-in programmer looks like this:
-```
+
+--------------------
 Success. 3098 bytes at 57600 baud in 0.8s, 3674B/s 63% efficient
-```
+--------------------
+
 This says that the sketch comprises 3098 bytes of flash, was written in 0.8 seconds
 (excludes the initial sync time) at 57600 baud,
 and the 3098 bytes were flashed at a rate of 3674 bytes per second.
@@ -459,6 +482,7 @@ The esp-link web UI can display the esp-link debug log (os_printf statements in 
 is handy but sometimes not sufficient. Esp-link also prints the debug info to the UART where
 it is sometimes more convenient and sometimes less... For this reason three UART debug log
 modes are supported that can be set in the web UI (and the mode is saved in flash):
+
 - auto: the UART log starts enabled at boot using uart0 and disables itself when esp-link
   associates with an AP. It re-enables itself if the association is lost.
 - off: the UART log is always off
@@ -470,6 +494,7 @@ esp8266 comes out of reset. This cannot be disabled.
 
 Outbound HTTP REST requests and MQTT client
 -------------------------------------------
+
 The V2 versions of esp-link support the espduino SLIP protocol that supports simple outbound
 HTTP REST requests as well as an MQTT client. The SLIP protocol consists of commands with
 binary arguments sent from the
@@ -481,11 +506,12 @@ uC when requests complete or when other actions happen, such as wifi connectivit
 
 You can find a demo sketch in a fork of the espduino library at
 https://github.com/tve/espduino in the
-[examples/demo folder](https://github.com/tve/espduino/tree/master/espduino/examples/demo).
+https://github.com/tve/espduino/tree/master/espduino/examples/demo[examples/demo folder].
 
 More docs forthcoming...
 
 Contact
 -------
+
 If you find problems with esp-link, please create a github issue. If you have a question, please
 use the gitter chat link at the top of this page.
