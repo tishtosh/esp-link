@@ -2,7 +2,7 @@ ESP-LINK: Wifi-Serial Bridge w/REST&MQTT
 ========================================
 Thorsten von Eicken
 :toc:
-"toc-title:Table of Contents
+:toc-title:Blechhhh
 :toc-placement!:
 
 This firmware connects an attached micro-controller to the internet using a ESP8266 Wifi module.
@@ -27,7 +27,7 @@ Many thanks to https://github.com/brunnels for contributions in particular aroun
 functionality. Thank you also to https://github.com/susisstrolch and https://github.com/bc547 for
 additional contributions!
 
-
+[float]
 Table of Contents
 -----------------
 
